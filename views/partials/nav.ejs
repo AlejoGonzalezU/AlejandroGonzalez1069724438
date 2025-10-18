@@ -1,0 +1,13 @@
+<% if (locals.isAuthenticated) { %>
+    <nav class="main-nav">
+        <a href="/" class="<%= locals.currentPage === 'home' ? 'active' : '' %>">Inicio</a>
+        <a href="/profile" class="<%= locals.currentPage === 'profile' ? 'active' : '' %>">Mi Perfil</a>
+        <a href="/edit" class="<%= locals.currentPage === 'edit' ? 'active' : '' %>">Editar Perfil</a>
+        <a href="/logout" class="logout">Cerrar Sesión</a>
+    </nav>
+<% } else { %>
+    <nav class="main-nav">
+        <a href="/" class="<%= locals.currentPage === 'home' ? 'active' : '' %>">Inicio</a>
+        <a href="/login" class="primary">Iniciar Sesión</a>
+    </nav>
+<% } %>

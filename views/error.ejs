@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'Error' %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>¡Oops! Algo salió mal</h1>
+            <p>Ha ocurrido un error inesperado</p>
+        </header>
+        
+        <%- include('partials/nav') %>
+        
+        <main class="content">
+            <div class="error-message">
+                <strong>Error:</strong> <%= message %>
+            </div>
+            
+            <div class="welcome-message">
+                <h2>¿Qué puedes hacer?</h2>
+                <p>Puedes volver al inicio o, si estás autenticado, acceder a tu perfil.</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

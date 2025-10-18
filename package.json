@@ -1,0 +1,23 @@
+{
+  "name": "auth0-profile-app",
+  "version": "1.0.0",
+  "description": "Taller de Aplicaciones y Servicios Web - Actividad 3 - Aplicación de perfil con Auth0 y Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "original": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["auth0", "node", "itm", "alejandro", "gonzalez", "clean-architecture"],
+  "author": "Alejandro González",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-openid-connect": "^2.19.2"
+  }
+}
