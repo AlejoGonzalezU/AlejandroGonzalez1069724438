@@ -1,11 +1,11 @@
-# Aplicación Auth0 con Clean Architecture
+# Aplicación ASW ITM 2025-II
 
-Esta es una aplicación Node.js que utiliza Auth0 para autenticación y permite a los usuarios gestionar su información personal a través de formularios bonitos y funcionales.
+Esta es una aplicación Node.js que utiliza Auth0 para autenticación y permite a los usuarios gestionar su información personal a través de formularios estilizados y funcionales.
 
 ## 🚀 Características
 
 - ✅ **Autenticación segura** con Auth0
-- ✅ **Formularios responsivos** y bonitos
+- ✅ **Formularios responsivos** y estilizados
 - ✅ **Validaciones del lado cliente y servidor**
 - ✅ **Arquitectura limpia** organizada por capas
 - ✅ **Gestión de metadatos de usuario**
@@ -38,7 +38,7 @@ npm install
 
 ### 2. Configurar variables de entorno
 
-El archivo `.env` ya está configurado con tus credenciales de Auth0:
+Configura el archivo `.env` con las credenciales de app de Auth0. Una versión de efecto se encuentra en el repositorio.
 
 ### 3. Ejecutar la aplicación
 
@@ -112,30 +112,20 @@ node server.js
 
 ## 🎯 Próximas Mejoras
 
-- [ ] Subida de fotos de perfil
-- [ ] Más campos de información personal
-- [ ] Notificaciones por email
-- [ ] Historial de cambios
-- [ ] API REST para uso externo
-
-## 🚨 Notas Importantes
-
-1. **Seguridad**: Las credenciales de Auth0 están en el archivo `.env`. En producción, usa variables de entorno seguras.
-
-2. **Management API**: Para que funcione la edición de perfil, asegúrate de que tu aplicación Auth0 tenga permisos para la Management API.
-
-3. **Archivos nuevos**: Se crearon versiones mejoradas de las vistas con sufijo `-new`. Para usar la versión mejorada, renombra:
-   - `index-new.ejs` → `index.ejs`
-   - `profile-new.ejs` → `profile.ejs`
-   - `edit-new.ejs` → `edit.ejs`
+- [x] Configurar el formulario de logueo de Auth0
+- [ ] Modificar el Universal Login de Auth0
+- [ ] Espacio para modificar los datos del usuario
+- [x] Funcionalidad de actualización de datos de usuario
+- [ ] Consumir la API de Auth0 para guardar los datos
+- [x] Documentación 
+- [ ] Diagrama de flujo
 
 ## 📞 Soporte
 
-Si encuentras algún problema o tienes preguntas sobre la implementación, revisa:
+Si encuentras algún problema o tienes preguntas sobre la implementación, debes obtener:
 
-1. Los logs del servidor en la consola
-2. La configuración de Auth0 en el dashboard
-3. Los permisos de la Management API
-4. Las validaciones en el navegador (F12 → Console)
+1. Las 7 esferas del dragón.
+2. Un pelo de la barba de Severus Snape.
+3. El One Piece.
+4. Un 5 en una materia con Delio.
 
-¡Disfruta tu nueva aplicación Auth0 con formularios bonitos! 🎉
