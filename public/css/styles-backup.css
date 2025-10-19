@@ -30,7 +30,6 @@ body {
   padding: 20px;
 }
 
-/* Container principal */
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -41,7 +40,6 @@ body {
   min-height: calc(100vh - 40px);
 }
 
-/* Header */
 .header {
   background: var(--primary-color);
   color: white;
@@ -75,12 +73,10 @@ body {
   z-index: 1;
 }
 
-/* Content area */
 .content {
   padding: 40px;
 }
 
-/* Navigation */
 .nav {
   display: flex;
   gap: 15px;
@@ -114,7 +110,6 @@ body {
   background: var(--primary-hover);
 }
 
-/* Forms */
 .form-container {
   background: var(--secondary-color);
   border-radius: var(--border-radius);
@@ -160,7 +155,6 @@ body {
   background-color: rgba(239, 68, 68, 0.05);
 }
 
-/* Select */
 .form-select {
   width: 100%;
   padding: 12px 16px;
@@ -178,7 +172,6 @@ body {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
-/* Buttons */
 .btn {
   display: inline-block;
   padding: 12px 24px;
@@ -226,7 +219,6 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-/* Profile card */
 .profile-card {
   background: var(--secondary-color);
   border-radius: var(--border-radius);
@@ -261,7 +253,6 @@ body {
   color: var(--text-secondary);
 }
 
-/* Error messages */
 .error-message {
   background: rgba(239, 68, 68, 0.1);
   color: var(--error-color);
@@ -272,7 +263,6 @@ body {
   font-weight: 500;
 }
 
-/* Success messages */
 .success-message {
   background: rgba(16, 185, 129, 0.1);
   color: var(--success-color);
@@ -283,7 +273,6 @@ body {
   font-weight: 500;
 }
 
-/* Loading state */
 .loading {
   opacity: 0.6;
   pointer-events: none;
@@ -315,7 +304,6 @@ body {
   }
 }
 
-/* Form validation styles */
 .field-error {
   color: var(--error-color);
   font-size: 0.875em;
@@ -327,7 +315,6 @@ body {
   display: none;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   body {
     padding: 10px;
@@ -363,7 +350,6 @@ body {
   }
 }
 
-/* Authentication status */
 .auth-status {
   background: rgba(16, 185, 129, 0.1);
   color: var(--success-color);
@@ -382,7 +368,6 @@ body {
   font-size: 1.2em;
 }
 
-/* Welcome message */
 .welcome-message {
   text-align: center;
   padding: 40px 20px;

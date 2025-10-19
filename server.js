@@ -13,16 +13,13 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Configuración de vistas
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Configuración de Auth0
 const config = {
   authRequired: false,
   auth0Logout: true,
@@ -34,20 +31,16 @@ const config = {
 
 app.use(auth(config));
 
-// Middleware para variables globales en las vistas
 app.use((req, res, next) => {
   res.locals.user = req.oidc.user;
   res.locals.isAuthenticated = req.oidc.isAuthenticated();
-  next();
+  res.locals.currentPage = req.path === "/" ? "home" : req.path.replace("/", "");  next();
 });
 
-// Rutas
-app.use('/', routes);
+console.log("🔍 Configurando rutas...");app.use('/', routes);
 
-// Manejo de errores 404
 app.use(profileController.notFound);
 
-// Manejo de errores generales
 app.use(profileController.error);
 
 const PORT = process.env.PORT || 3000;
