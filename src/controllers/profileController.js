@@ -90,23 +90,23 @@ class ProfileController {
       const userId = req.oidc.user.sub;
       const userInfo = await auth0Service.getUserById(userId);
 
-      res.render('edit', { 
+      res.render('editProfile', { 
         user: userInfo,
         meta: userInfo.user_metadata || {},
         errors: [],
         success: false,
         title: 'Editar Perfil',
-        currentPage: 'edit'
+        currentPage: 'editProfile'
       });
     } catch (error) {
       console.error('Error mostrando formulario de edición:', error);
-      res.render('edit', { 
+      res.render('editProfile', { 
         user: req.oidc.user,
         meta: req.oidc.user.user_metadata || {},
         errors: ['No se pudo cargar la información del perfil'],
         success: false,
         title: 'Editar Perfil',
-        currentPage: 'edit'
+        currentPage: 'editProfile'
       });
     }
   }
@@ -153,13 +153,13 @@ class ProfileController {
       // If validation fails, return form with errors
       if (!validation.isValid) {
         const userInfo = await auth0Service.getUserById(userId);
-        return res.render('edit', {
+        return res.render('editProfile', {
           user: userInfo,
           meta: { ...userInfo.user_metadata, ...sanitizedData },
           errors: validation.errors,
           success: false,
           title: 'Editar Perfil',
-          currentPage: 'edit'
+          currentPage: 'editProfile'
         });
       }
 
@@ -170,13 +170,13 @@ class ProfileController {
       const updatedUser = await auth0Service.getUserById(userId);
 
       // Return form with success message
-      res.render('edit', {
+      res.render('editProfile', {
         user: updatedUser,
         meta: updatedUser.user_metadata || {},
         errors: [],
         success: 'Perfil actualizado exitosamente',
         title: 'Editar Perfil',
-        currentPage: 'edit'
+        currentPage: 'editProfile'
       });
 
     } catch (error) {
@@ -185,23 +185,23 @@ class ProfileController {
       // Try to show form with error message
       try {
         const userInfo = await auth0Service.getUserById(req.oidc.user.sub);
-        res.render('edit', {
+        res.render('editProfile', {
           user: userInfo,
           meta: { ...userInfo.user_metadata, ...req.body },
           errors: ['Error al actualizar el perfil. Por favor, intenta nuevamente.'],
           success: false,
           title: 'Editar Perfil',
-          currentPage: 'edit'
+          currentPage: 'editProfile'
         });
       } catch (innerError) {
         // Fallback if we can't even retrieve user info
-        res.render('edit', {
+        res.render('editProfile', {
           user: req.oidc.user,
           meta: req.body,
           errors: ['Error al actualizar el perfil. Por favor, intenta nuevamente.'],
           success: false,
           title: 'Editar Perfil',
-          currentPage: 'edit'
+          currentPage: 'editProfile'
         });
       }
     }

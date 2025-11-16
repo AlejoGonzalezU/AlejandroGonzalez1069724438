@@ -3,56 +3,43 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Aplicación Auth0</title>
+    <title>Inicio - Actividad 4 - CRUD</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <header class="header">
-            <h1>Actividad 3 - Auth0</h1>
-            <p>Sistema de autenticación y gestión de perfiles</p>
-        </header>
-        
-        <%- include('partials/nav') %>
-        
-        <main class="content">
-            <% if (user) { %>
-                <div class="auth-status">
-                    ¡Bienvenido! Has iniciado sesión correctamente
-                </div>
-                
-                <div class="welcome-message">
-                    <h2>Hola, <%= user.name || user.email %>!</h2>
-                    <p>Puedes acceder a tu perfil y editar tu información personal desde el menú superior.</p>
-                </div>
-                
-                <div class="profile-info">
-                    <h3>Información básica</h3>
-                    <p><strong>Email:</strong> <%= user.email || 'No disponible' %></p>
-                    <p><strong>Nombre:</strong> <%= user.name || 'No configurado' %></p>
-                    <p><strong>Último acceso:</strong> <%= user.updated_at ? new Date(user.updated_at).toLocaleDateString('es-ES') : 'No disponible' %></p>
-                </div>
-            <% } else { %>
-                <div class="welcome-message">
-                    <h2>¡Bienvenido a nuestra aplicación!</h2>
-                    <p>Para acceder a todas las funcionalidades, necesitas iniciar sesión con tu cuenta de Auth0.</p>
-                </div>
-                
-                <div class="profile-info">
-                    <h3>¿Qué puedes hacer una vez que inicies sesión?</h3>
-                    <ul>
-                        <li>Ver y editar tu información personal</li>
-                        <li>Gestionar tus datos de contacto</li>
-                        <li>Actualizar tu perfil de usuario</li>
-                        <li>Acceso seguro con Auth0</li>
-                    </ul>
-                </div>
-            <% } %>
-        </main>
-    </div>
+<body class="fullscreen">
+    <header class="top-header">
+        <h1>Actividad 4 - CRUD</h1>
+        <p>Sistema de autenticación y gestión de productos</p>
+    </header>
+    
+    <%- include('partials/nav') %>
+    
+    <main class="main-content">
+        <% if (user) { %>
+            <div class="welcome-message">
+                <h2>¡Hola, <%= user.name || user.email %>!</h2>
+                <p>Bienvenido de nuevo. Puedes gestionar tus productos y actualizar tu perfil desde el menú superior.</p>
+            </div>
+        <% } else { %>
+            <div class="welcome-message">
+                <h2>¡Bienvenido a nuestra aplicación!</h2>
+                <p>Para acceder a todas las funcionalidades, necesitas iniciar sesión con tu cuenta de Auth0.</p>
+            </div>
+            
+            <div class="feature-list">
+                <h3>¿Qué puedes hacer una vez que inicies sesión?</h3>
+                <ul>
+                    <li>Gestionar tu catálogo de productos (crear, editar, eliminar)</li>
+                    <li>Ver y editar tu información personal</li>
+                    <li>Actualizar tus datos de contacto</li>
+                    <li>Acceso seguro con Auth0</li>
+                </ul>
+            </div>
+        <% } %>
+    </main>
     
     <script src="/js/app.js"></script>
 </body>

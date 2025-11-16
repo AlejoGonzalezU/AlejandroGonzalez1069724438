@@ -34,10 +34,12 @@ app.use(auth(config));
 app.use((req, res, next) => {
   res.locals.user = req.oidc.user;
   res.locals.isAuthenticated = req.oidc.isAuthenticated();
-  res.locals.currentPage = req.path === "/" ? "home" : req.path.replace("/", "");  next();
+  res.locals.currentPage = req.path === "/" ? "home" : req.path.replace("/", "");
+  next();
 });
 
-console.log("🔍 Configurando rutas...");app.use('/', routes);
+console.log("🔍 Configurando rutas...");
+app.use('/', routes);
 
 app.use(profileController.notFound);
 

@@ -1,8 +1,19 @@
 <% if (locals.isAuthenticated) { %>
     <nav class="main-nav">
         <a href="/" class="<%= locals.currentPage === 'home' ? 'active' : '' %>">Inicio</a>
-        <a href="/profile" class="<%= locals.currentPage === 'profile' ? 'active' : '' %>">Mi Perfil</a>
-        <a href="/edit" class="<%= locals.currentPage === 'edit' ? 'active' : '' %>">Editar Perfil</a>
+        
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle <%= ['profile', 'editProfile'].includes(locals.currentPage) ? 'active' : '' %>">
+                Perfil
+                <span class="dropdown-arrow">▼</span>
+            </a>
+            <div class="dropdown-menu">
+                <a href="/profile" class="dropdown-item">Ver Perfil</a>
+                <a href="/profile/edit" class="dropdown-item">Editar Perfil</a>
+            </div>
+        </div>
+        
+        <a href="/products" class="<%= locals.currentPage === 'products' ? 'active' : '' %>">Productos</a>
         <a href="/logout" class="logout">Cerrar Sesión</a>
     </nav>
 <% } else { %>
