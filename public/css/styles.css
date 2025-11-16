@@ -769,6 +769,7 @@ table.dataTable tbody td:last-child {
 }
 
 .modal-footer {
+  padding: 0 0 20px 0;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -1049,4 +1050,9 @@ table.dataTable tbody td:last-child {
 .dataTables_wrapper .dt-row {
   position: relative;
   z-index: 1;
+}
+
+/* Fix modal footer spacing - add padding to prevent buttons touching edges */
+.modal-footer {
+  padding: 0 20px 20px 20px !important;
 }
