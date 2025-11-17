@@ -4,7 +4,6 @@ import path from 'path';
 import os from 'os';
 import productService from '../src/services/productService.js';
 
-// The original csv path must stored so it won't be affected by tests
 const originalCsvPath = productService.getCSVPath();
 let tempCsvPath;
 
@@ -22,11 +21,11 @@ describe('ProductService - CRUD Operations', () => {
         1,Producto Test 1,Descripción test 1,1000,10,1
         2,Producto Test 2,Descripción test 2,2000,20,1
         3,Producto Inactivo,Descripción inactiva,3000,30,0`;
+
     await fs.writeFile(tempCsvPath, testData, 'utf-8');
     productService.setCSVPath(tempCsvPath);
   });
 
-  // Cleanup: delete temporary file and restore original path
   afterEach(async () => {
     try {
       await fs.unlink(tempCsvPath);
@@ -59,10 +58,10 @@ describe('ProductService - CRUD Operations', () => {
       expect(result.activo).toBe(true);
     });
 
-    it('❌ Caso de error: Debe fallar con nombre inválido (< 3 caracteres)', async () => {
+    it('Error case: Should fail with invalid name (less than 3 characters)', async () => {
       // Arrange
       const invalidProduct = {
-        nombre: 'AB', // Only 2 characters
+        nombre: 'AB',
         descripcion: 'Descripción',
         precio: 1000,
         cantidad: 10
@@ -74,12 +73,12 @@ describe('ProductService - CRUD Operations', () => {
         .toThrow('El nombre debe tener al menos 3 caracteres');
     });
 
-    it('❌ Caso de error: Debe fallar con precio inválido (≤ 0)', async () => {
+    it('Error case: Should fail with invalid price (less than or equal to 0)', async () => {
       // Arrange
       const invalidProduct = {
         nombre: 'Producto Test',
         descripcion: 'Descripción',
-        precio: 0, // Invalid price
+        precio: 0,
         cantidad: 10
       };
 
@@ -89,13 +88,13 @@ describe('ProductService - CRUD Operations', () => {
         .toThrow('El precio debe ser mayor a 0');
     });
 
-    it('Error case: Should fail with invalid quantity (< 0)', async () => {
+    it('Error case: Should fail with invalid quantity (negative number)', async () => {
       // Arrange
       const invalidProduct = {
         nombre: 'Producto Test',
         descripcion: 'Descripción',
         precio: 1000,
-        cantidad: -5 // Negative amount
+        cantidad: -5
       };
 
       // Act & Assert
