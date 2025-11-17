@@ -20,6 +20,23 @@ class ProductService {
   }
 
   /**
+   * Permite sobreescribir la ruta del archivo CSV (útil para pruebas unitarias)
+   * No valida la existencia inmediata; las operaciones posteriores lo harán.
+   * @param {string} newPath Ruta absoluta al CSV de prueba
+   */
+  setCSVPath(newPath) {
+    this.csvPath = newPath;
+  }
+
+  /**
+   * Devuelve la ruta actual del CSV (principalmente para depuración / tests)
+   * @returns {string}
+   */
+  getCSVPath() {
+    return this.csvPath;
+  }
+
+  /**
    * Reads all products from CSV file
    * Parses CSV content into array of product objects
    * 
