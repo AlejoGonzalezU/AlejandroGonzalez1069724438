@@ -38,7 +38,6 @@ app.use((req, res, next) => {
   next();
 });
 
-console.log("🔍 Configurando rutas...");
 app.use('/', routes);
 
 app.use(profileController.notFound);

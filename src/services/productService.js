@@ -147,9 +147,8 @@ class ProductService {
       }
 
       await fs.writeFile(this.csvPath, content, 'utf-8');
-      console.log('✅ Productos guardados exitosamente');
     } catch (error) {
-      console.error('❌ Error escribiendo productos:', error.message);
+      console.error('Error:', error.message);
       throw new Error('No se pudieron guardar los productos');
     }
   }
@@ -224,10 +223,9 @@ class ProductService {
       products.push(newProduct);
       await this.writeProducts(products);
 
-      console.log('✅ Producto creado:', newProduct);
       return newProduct;
     } catch (error) {
-      console.error('❌ Error creando producto:', error.message);
+      console.error('Error:', error.message);
       throw error;
     }
   }
@@ -264,10 +262,9 @@ class ProductService {
       };
 
       await this.writeProducts(products);
-      console.log('✅ Producto actualizado:', products[index]);
       return products[index];
     } catch (error) {
-      console.error('❌ Error actualizando producto:', error.message);
+      console.error('Error:', error.message);
       throw error;
     }
   }
@@ -290,10 +287,9 @@ class ProductService {
 
       products[index].activo = false;
       await this.writeProducts(products);
-      console.log('✅ Producto eliminado (soft delete):', id);
       return true;
     } catch (error) {
-      console.error('❌ Error eliminando producto:', error.message);
+      console.error('Error:', error.message);
       throw error;
     }
   }

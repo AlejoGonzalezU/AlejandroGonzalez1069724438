@@ -37,11 +37,6 @@ class Auth0Service {
     }
 
     try {
-      console.log('🔄 Obteniendo token de Auth0 Management API...');
-      console.log('📍 Domain:', this.domain);
-      console.log('📍 Client ID:', this.clientId);
-      console.log('📍 Audience:', this.audience);
-      
       // Request new token using client credentials flow
       const response = await fetch(`${this.domain}/oauth/token`, {
         method: 'POST',
@@ -56,13 +51,12 @@ class Auth0Service {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ Error HTTP:', response.status, response.statusText);
-        console.error('❌ Response:', errorText);
+        console.error('Error:', response.status, response.statusText);
+        console.error('Response:', errorText);
         throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`);
       }
 
       const data = await response.json();
-      console.log('✅ Token obtenido exitosamente. Expira en:', data.expires_in, 'segundos');
 
       // Cache token with 5-minute buffer before expiration
       this.tokenCache = data.access_token;
@@ -70,7 +64,7 @@ class Auth0Service {
 
       return this.tokenCache;
     } catch (error) {
-      console.error('❌ Error obteniendo token de Management API:', error.message);
+      console.error('Error:', error.message);
       throw new Error('No se pudo obtener el token de acceso a Auth0');
     }
   }
@@ -91,8 +85,6 @@ class Auth0Service {
   async updateUserMetadata(userId, userMetadata) {
     try {
       const token = await this.getManagementToken();
-      console.log('🔄 Actualizando metadata para usuario:', userId);
-      console.log('📄 Datos a actualizar:', JSON.stringify(userMetadata, null, 2));
       
       // PATCH request to update user metadata
       const response = await fetch(`${this.audience}users/${userId}`, {
@@ -108,15 +100,14 @@ class Auth0Service {
 
       if (!response.ok) {
         const errorData = await response.text();
-        console.error('❌ Error actualizando usuario:', response.status, errorData);
+        console.error('Error:', response.status, errorData);
         throw new Error(`HTTP ${response.status}: ${errorData}`);
       }
 
       const result = await response.json();
-      console.log('✅ Usuario actualizado exitosamente');
       return result;
     } catch (error) {
-      console.error('❌ Error actualizando metadatos del usuario:', error.message);
+      console.error('Error:', error.message);
       throw new Error('No se pudieron actualizar los datos del usuario');
     }
   }
@@ -135,7 +126,6 @@ class Auth0Service {
   async getUserById(userId) {
     try {
       const token = await this.getManagementToken();
-      console.log('🔄 Obteniendo información del usuario:', userId);
       
       // GET request to retrieve user data
       const response = await fetch(`${this.audience}users/${userId}`, {
@@ -148,15 +138,14 @@ class Auth0Service {
 
       if (!response.ok) {
         const errorData = await response.text();
-        console.error('❌ Error obteniendo usuario:', response.status, errorData);
+        console.error('Error:', response.status, errorData);
         throw new Error(`HTTP ${response.status}: ${errorData}`);
       }
 
       const result = await response.json();
-      console.log('✅ Información de usuario obtenida exitosamente');
       return result;
     } catch (error) {
-      console.error('❌ Error obteniendo información del usuario:', error.message);
+      console.error('Error:', error.message);
       throw new Error('No se pudo obtener la información del usuario');
     }
   }

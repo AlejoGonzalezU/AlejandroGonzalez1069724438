@@ -126,8 +126,6 @@ async function editProduct(id) {
         
         const product = await response.json();
         
-        console.log('Producto recibido:', product);
-        console.log('Precio del producto:', product.precio, typeof product.precio);
         
         document.getElementById('modalTitle').textContent = 'Editar Producto';
         document.getElementById('productId').value = product.id;
@@ -135,7 +133,6 @@ async function editProduct(id) {
         document.getElementById('descripcion').value = product.descripcion || '';
         const precioInput = document.getElementById('precio');
         precioInput.value = product.precio;
-        console.log('Valor asignado al input precio:', precioInput.value);
         document.getElementById('cantidad').value = product.cantidad;
         
         currentProductId = id;
