@@ -371,7 +371,6 @@ Define todos los endpoints HTTP y aplica middleware.
 - **Fetch API nativo** de Node.js v18+ (sin axios ni dependencias externas)
 - Credenciales M2M (Machine to Machine) separadas del flujo de login
 - Control explícito de respuestas HTTP con manejo de errores
-- Logging detallado con emojis para debugging (✅ éxito, ❌ error)
 - Reintentos automáticos en caso de token expirado
 
 ### Validaciones Robustas (Defense in Depth)
@@ -390,10 +389,6 @@ Define todos los endpoints HTTP y aplica middleware.
 ### Manejo de Errores y Logging
 - **Páginas de error personalizadas** (`error.ejs`)
 - **Mensajes de error claros** para el usuario final
-- **Logging completo en servidor** con:
-  - ✅ Operaciones exitosas (verde)
-  - ❌ Errores (rojo)
-  - ℹ️ Información (azul)
 - **Fallback graceful** en caso de fallos de API (muestra datos parciales)
 - **Captura de errores en múltiples niveles**:
   - Try-catch en servicios
