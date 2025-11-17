@@ -1,50 +1,80 @@
-# Aplicación ASW ITM 2025-II
+# Aplicación CRUD con Auth0 - ASW ITM 2025-II
 
-Esta es una aplicación Node.js que utiliza Auth0 para autenticación y permite a los usuarios gestionar su información personal a través de formularios estilizados y funcionales.
+Aplicación Node.js full-stack que combina autenticación segura con Auth0 y gestión completa de productos mediante operaciones CRUD. Incluye gestión de perfiles de usuario, almacenamiento en CSV, DataTables para visualización interactiva y pruebas unitarias con Vitest.
 
-## 🚀 Características
+## 🚀 Características Principales
 
-- ✅ **Autenticación segura** con Auth0
-- ✅ **Formularios responsivos** y estilizados
-- ✅ **Validaciones del lado cliente y servidor**
-- ✅ **Arquitectura limpia** organizada por capas
-- ✅ **Gestión de metadatos de usuario**
-- ✅ **Interfaz moderna** con CSS custom
-- ✅ **Experiencia de usuario optimizada**
-- ✅ **Auth0 Management API** integrada con credenciales M2M
-- ✅ **Fetch API nativo** (sin dependencias externas de HTTP)
-- ✅ **Código completamente documentado** en inglés
+### Autenticación y Perfiles
+- ✅ **Autenticación segura** con Auth0 (express-openid-connect)
+- ✅ **Gestión de perfiles de usuario** con Auth0 Management API
+- ✅ **Formularios de edición** responsivos y validados
+- ✅ **Metadatos de usuario** personalizados (documento, dirección, teléfono)
+
+### Sistema CRUD de Productos
+- ✅ **Operaciones CRUD completas** (Create, Read, Update, Delete)
+- ✅ **Almacenamiento en CSV** con manejo robusto de archivos
+- ✅ **DataTables 1.13.7** con paginación, búsqueda y ordenamiento
+- ✅ **Localización en español** (interfaz y mensajes)
+- ✅ **Soft delete** (eliminación lógica manteniendo histórico)
+- ✅ **IDs secuenciales** generados automáticamente
+- ✅ **Modales Bootstrap** para crear y editar productos
+- ✅ **Toasts de notificación** para feedback visual
+
+### Arquitectura y Calidad
+- ✅ **Clean Architecture** organizada por capas (routes → controllers → services)
+- ✅ **Validaciones dual layer** (cliente y servidor)
+- ✅ **Defense in Depth** para seguridad
+- ✅ **Pruebas unitarias** con Vitest (14 tests, 100% pasando)
+- ✅ **Código documentado** con JSDoc en inglés
+- ✅ **ES Modules** (import/export)
+- ✅ **Fetch API nativo** sin dependencias externas
 
 ## 📁 Estructura del Proyecto
 
 ```
 Application/
 ├── src/
-│   ├── controllers/     # Lógica de controladores
-│   │   └── profileController.js
-│   ├── services/        # Servicios de negocio
-│   │   └── auth0Service.js
-│   └── routes/          # Definición de rutas
-│       └── index.js
-├── views/               # Plantillas EJS
-│   ├── index.ejs       # Página principal
-│   ├── profile.ejs     # Vista de perfil
-│   ├── edit.ejs        # Formulario de edición
-│   ├── error.ejs       # Página de errores
-│   └── partials/       # Componentes reutilizables
-│       └── nav.ejs     # Navegación dinámica
+│   ├── controllers/           # Lógica de controladores (manejo de requests/responses)
+│   │   ├── profileController.js    # Gestión de perfiles de usuario
+│   │   └── productController.js    # Gestión de productos (CRUD)
+│   ├── services/              # Servicios de negocio (lógica de dominio)
+│   │   ├── auth0Service.js         # Integración con Auth0 Management API
+│   │   └── productService.js       # Lógica CRUD, CSV, validaciones
+│   └── routes/                # Definición de rutas HTTP
+│       ├── index.js                # Rutas de perfil y autenticación
+│       └── productRoutes.js        # Rutas de productos (/products/*)
+├── views/                     # Plantillas EJS (server-side rendering)
+│   ├── index.ejs                   # Página principal con bienvenida
+│   ├── profile.ejs                 # Vista de perfil de usuario
+│   ├── editProfile.ejs             # Formulario de edición de perfil
+│   ├── products.ejs                # Gestión de productos con DataTables
+│   ├── error.ejs                   # Página de errores personalizada
+│   └── layout.ejs                  # Layout base reutilizable
 ├── public/
-│   ├── css/            # Estilos CSS
-│   │   └── styles.css
-│   └── js/             # JavaScript del frontend
-│       └── app.js
-├── server.js           # Archivo principal del servidor
-├── .env                # Variables de entorno (no versionado)
-├── .env.example        # Ejemplo de configuración
-└── package.json        # Dependencias y configuración
+│   ├── css/
+│   │   └── styles.css              # Estilos globales, modales, DataTables
+│   ├── js/
+│   │   ├── app.js                  # Validaciones del formulario de perfil
+│   │   └── products.js             # Lógica frontend de productos (modales, fetch)
+│   └── favicon.svg                 # Icono de la aplicación
+├── data/
+│   └── productos.csv               # Almacenamiento de productos (CSV)
+├── tests/
+│   ├── productService.test.js      # Suite de pruebas unitarias (Vitest)
+│   └── README.md                   # Documentación de testing
+├── server.js                  # Archivo principal del servidor Express
+├── .env                       # Variables de entorno (no versionado)
+├── .env.example               # Ejemplo de configuración
+├── package.json               # Dependencias y scripts npm
+└── README.md                  # Este archivo
 ```
 
 ## 🛠️ Instalación y Configuración
+
+### Requisitos Previos
+- **Node.js v18+** (para soporte nativo de Fetch API y ES Modules)
+- **npm** (gestor de paquetes)
+- **Cuenta de Auth0** (gratuita en [auth0.com](https://auth0.com))
 
 ### 1. Instalar dependencias
 
@@ -54,24 +84,28 @@ npm install
 
 ### 2. Configurar variables de entorno
 
-Crea un archivo `.env` basado en `.env.example` y configura las siguientes variables:
+Crea un archivo `.env` basado en `.env.example`:
 
 ```env
 # Puerto del servidor
 PORT=3000
 
-# Configuración de Auth0 para autenticación
-AUTH0_SECRET=your-random-secret-string
+# Configuración de Auth0 para autenticación de usuarios
+AUTH0_SECRET=your-random-secret-string-min-32-chars
 AUTH0_BASE_URL=http://localhost:3000
 AUTH0_ISSUER_BASE_URL=https://your-tenant.auth0.com
 AUTH0_CLIENT_ID=your-client-id
 AUTH0_CLIENT_SECRET=your-client-secret
 
-# Credenciales de Auth0 Management API (M2M)
+# Credenciales de Auth0 Management API (M2M - Machine to Machine)
 AUTH0_M2M_CLIENT_ID=your-m2m-client-id
 AUTH0_M2M_CLIENT_SECRET=your-m2m-client-secret
-AUTH0_AUDIENCE=https://your-tenant.auth0.com
+AUTH0_AUDIENCE=https://your-tenant.auth0.com/api/v2/
 ```
+
+**Nota importante sobre `AUTH0_SECRET`:**
+- Debe tener al menos 32 caracteres
+- Puedes generarlo con: `openssl rand -base64 32`
 
 ### 3. Configurar Auth0 Management API
 
@@ -93,142 +127,313 @@ Client is not authorized to access resource server
 
 ### 4. Ejecutar la aplicación
 
+#### Modo producción:
+```bash
+npm start
+```
+
+#### Modo desarrollo (auto-reload con --watch):
 ```bash
 node server.js
 ```
 
 La aplicación estará disponible en `http://localhost:3000`
 
+### 5. Ejecutar pruebas unitarias
+
+```bash
+# Ejecutar una vez (CI mode)
+npm run test:run
+
+# Modo watch (desarrollo)
+npm test
+
+# Con interfaz visual (opcional)
+npm run test:ui
+
+# Con reporte de cobertura (requiere @vitest/coverage-v8)
+npm run test:coverage
+```
+
 ## 🎨 Características de la Interfaz
 
-### Formularios estilizados
-- **Diseño moderno** con gradientes y sombras
-- **Validaciones en tiempo real** con JavaScript
+### Gestión de Perfiles de Usuario
+- **Formularios estilizados** con diseño moderno (gradientes, sombras, animaciones)
+- **Validaciones en tiempo real** con JavaScript vanilla
 - **Mensajes de error claros** y bien posicionados
-- **Estados de carga** en botones
-- **Responsive design** para móviles y desktop
-- **Navegación dinámica** que cambia según el estado de autenticación
+- **Estados de carga** en botones durante envío
+- **Responsive design** para móviles, tablets y desktop
+- **Layout reutilizable** con navegación dinámica según estado de autenticación
+
+### Sistema de Productos
+- **DataTables interactivo** con:
+  - Paginación (10, 25, 50, 100 registros)
+  - Búsqueda en tiempo real
+  - Ordenamiento por columnas
+  - Localización completa en español
+  - Formato de precios COP (pesos colombianos)
+- **Modales Bootstrap 5** para crear/editar productos
+- **Toasts de notificación** (éxito, error, advertencia)
+- **Confirmación de eliminación** con SweetAlert2
+- **Badges de estado** (activo/inactivo)
+- **Botones de acción** agrupados por operación
 
 ### Validaciones Implementadas
 
-#### Cliente (JavaScript)
+#### Perfiles de Usuario
+**Cliente (JavaScript):**
 - Validación en tiempo real mientras el usuario escribe
 - Feedback visual inmediato (campos rojos, mensajes de error)
 - Prevención de envío de formularios inválidos
 
-#### Servidor (Node.js)
-- **Tipo de documento**: Selección obligatoria entre CC, TI, CE, PAS, NIT
+**Servidor (Node.js):**
+- **Tipo de documento**: Selección obligatoria (CC, TI, CE, PAS, NIT)
 - **Número de documento**: Entre 6 y 15 dígitos, solo números
 - **Dirección**: Entre 5 y 100 caracteres (opcional)
 - **Teléfono**: Mínimo 7 dígitos, formato flexible con +, espacios, guiones y paréntesis (opcional)
 
+#### Productos
+**Cliente y Servidor (Defense in Depth):**
+- **Nombre**: Mínimo 3 caracteres, obligatorio
+- **Descripción**: Campo opcional pero sin límite
+- **Precio**: Mayor a 0, solo números positivos
+- **Cantidad**: Entero positivo (≥ 0), no acepta decimales
+
 ## 🏗️ Clean Architecture (Simplificada)
 
 ### Capa de Presentación
-- **Views (EJS)**: Plantillas del lado del servidor
+- **Views (EJS)**: Plantillas server-side rendering
+  - `layout.ejs` - Template base reutilizable
+  - `index.ejs` - Página de inicio
+  - `profile.ejs` - Vista de perfil
+  - `editProfile.ejs` - Formulario de edición de perfil
+  - `products.ejs` - Gestión de productos con DataTables
+  - `error.ejs` - Página de errores personalizada
 - **Public Assets**: CSS y JavaScript del cliente
-- Navegación dinámica con componentes reutilizables
+  - `styles.css` - Estilos globales, modales, DataTables
+  - `app.js` - Validaciones de perfil
+  - `products.js` - Lógica frontend de productos
+  - `favicon.svg` - Icono SVG
 
 ### Capa de Controladores (`src/controllers/`)
-- **profileController.js**: Maneja todas las rutas relacionadas con perfiles
-  - `home()` - Página principal
-  - `profile()` - Vista de perfil del usuario
-  - `editForm()` - Formulario de edición (GET)
-  - `updateProfile()` - Procesamiento de actualización (POST)
-  - `notFound()` - Manejo de errores 404
-  - `error()` - Middleware de errores global
+Maneja todas las rutas HTTP y coordina entre la capa de presentación y servicios.
+
+**profileController.js**:
+- `home()` - Página principal con bienvenida personalizada
+- `profile()` - Vista de perfil del usuario autenticado
+- `editProfileForm()` - Formulario de edición de perfil (GET)
+- `updateProfile()` - Procesamiento de actualización de perfil (POST)
+- `notFound()` - Manejo de errores 404
+- `error()` - Middleware de errores global
+
+**productController.js**:
+- `getProductsPage()` - Renderiza página de gestión de productos
+- `getProducts()` - API endpoint que devuelve JSON de productos activos
+- `createProduct()` - Crea un nuevo producto (POST JSON)
+- `updateProduct()` - Actualiza producto existente (PUT JSON)
+- `deleteProduct()` - Elimina producto (soft delete) (DELETE JSON)
 
 ### Capa de Servicios (`src/services/`)
-- **auth0Service.js**: Capa de abstracción para Auth0 Management API
-  - `getManagementToken()` - Obtención y cache de tokens de acceso
-  - `getUserById()` - Recuperación de datos de usuario
-  - `updateUserMetadata()` - Actualización de metadatos
-  - `validateUserData()` - Validaciones de negocio
-  - `sanitizeUserData()` - Limpieza y normalización de datos
+Contiene la lógica de negocio y acceso a datos.
+
+**auth0Service.js**: Capa de abstracción para Auth0 Management API
+- `getManagementToken()` - Obtención y cache de tokens de acceso M2M
+- `getUserById()` - Recuperación de datos de usuario desde Auth0
+- `updateUserMetadata()` - Actualización de metadatos de usuario
+- `validateUserData()` - Validaciones de reglas de negocio
+- `sanitizeUserData()` - Limpieza y normalización de datos
+
+**productService.js**: Lógica CRUD y persistencia en CSV
+- `readProducts()` - Lee todos los productos del CSV
+- `getActiveProducts()` - Filtra solo productos activos
+- `getProductById()` - Obtiene un producto por ID
+- `createProduct()` - Crea producto con ID secuencial
+- `updateProduct()` - Actualiza producto existente
+- `deleteProduct()` - Soft delete (marca activo=false)
+- `validateProductData()` - Validaciones de productos
+- `parseCSVLine()` - Parser CSV robusto (maneja comillas y comas)
+- `escapeCSVField()` - Escapa campos para evitar corrupción
+- `setCSVPath()` / `getCSVPath()` - Inyección de ruta (útil para tests)
 
 ### Capa de Rutas (`src/routes/`)
-- **index.js**: Define todos los endpoints HTTP
-- Separación clara entre rutas GET y POST
-- Integración con middleware de autenticación
+Define todos los endpoints HTTP y aplica middleware.
 
-## 📱 Páginas Disponibles
+**index.js**: Rutas de autenticación y perfiles
+- `GET /` - Página principal
+- `GET /profile` - Vista de perfil (requiere auth)
+- `GET /edit` - Formulario de edición (requiere auth)
+- `POST /update` - Actualización de perfil (requiere auth)
 
-### `/` - Página Principal
+**productRoutes.js**: Rutas de gestión de productos
+- `GET /products` - Página de productos (requiere auth)
+- `GET /products/api` - Lista de productos JSON (requiere auth)
+- `POST /products/api` - Crear producto (requiere auth)
+- `PUT /products/api/:id` - Actualizar producto (requiere auth)
+- `DELETE /products/api/:id` - Eliminar producto (requiere auth)
+
+## 📱 Páginas y Endpoints
+
+### Páginas Públicas
+#### `GET /` - Página Principal
 - Bienvenida diferenciada para usuarios autenticados/no autenticados
 - Navegación clara hacia otras secciones
 - Información básica del usuario si está autenticado
+- Botón de acceso rápido a productos para usuarios autenticados
 
-### `/profile` - Perfil del Usuario
+#### `GET /login` - Iniciar Sesión
+- Redirección automática a Auth0 Universal Login
+- Manejo seguro de tokens y sesiones OAuth2
+- Callback automático tras autenticación exitosa
+
+#### `GET /logout` - Cerrar Sesión
+- Cierre de sesión en Auth0 y aplicación
+- Limpieza de cookies y tokens
+- Redirección a página principal
+
+### Páginas Protegidas (Requieren Autenticación)
+#### `GET /profile` - Perfil del Usuario
 - Visualización completa de los datos del usuario
 - Información separada por categorías:
-  - Datos básicos de Auth0
-  - Información personal (metadatos)
-  - JSON completo para desarrolladores
-- Manejo de errores graceful
+  - **Datos de Auth0**: email, nombre, foto de perfil
+  - **Información personal**: tipo y número de documento, dirección, teléfono
+  - **JSON completo** para desarrolladores (collapsible)
+- Botón de edición rápida
+- Manejo de errores graceful (si Auth0 falla)
 
-### `/edit` - Editar Perfil
-- Formulario completo con validaciones
+#### `GET /edit` - Editar Perfil
+- Formulario completo con validaciones duales
 - Campos pre-poblados con datos existentes
-- Validaciones del lado cliente y servidor
-- Mensajes de éxito/error claros
+- Validaciones del lado cliente (tiempo real)
+- Validaciones del lado servidor (seguridad)
 - Vista previa de información actual
+- Mensajes de éxito/error claros con toasts
 
-### `/login` - Iniciar Sesión
-- Redirección automática a Auth0 Universal Login
-- Manejo seguro de tokens y sesiones
+#### `POST /update` - Actualizar Perfil
+- Procesamiento de datos del formulario
+- Sanitización y validación de inputs
+- Actualización de `user_metadata` en Auth0
+- Respuesta JSON con resultado de operación
+- Manejo de errores detallado
 
-### `/logout` - Cerrar Sesión
-- Cierre de sesión en Auth0 y aplicación
-- Redirección a página principal
+#### `GET /products` - Gestión de Productos
+- Página completa de gestión CRUD
+- DataTables con datos cargados vía Fetch API
+- Modales para crear y editar productos
+- Botones de acción por fila (editar, eliminar)
+- Búsqueda, paginación y ordenamiento integrados
+
+### API Endpoints (REST JSON)
+#### `GET /products/api` - Listar Productos
+- Retorna JSON con array de productos activos
+- Formato: `[{ id, nombre, descripcion, precio, cantidad, activo }]`
+- Usado por DataTables para renderizar tabla
+
+#### `POST /products/api` - Crear Producto
+- Body JSON: `{ nombre, descripcion, precio, cantidad }`
+- Validaciones: nombre ≥ 3 chars, precio > 0, cantidad ≥ 0
+- Genera ID secuencial automático
+- Retorna: producto creado con ID asignado
+
+#### `PUT /products/api/:id` - Actualizar Producto
+- Params: `id` del producto
+- Body JSON: `{ nombre, descripcion, precio, cantidad }`
+- Valida existencia del producto
+- Mantiene estado de `activo` sin modificar
+- Retorna: producto actualizado
+
+#### `DELETE /products/api/:id` - Eliminar Producto (Soft Delete)
+- Params: `id` del producto
+- Marca `activo = false` sin eliminar físicamente
+- Permite mantener histórico de productos
+- Retorna: `{ success: true }`
 
 ## 🔧 Funcionalidades Técnicas
 
+### Sistema de Productos con CSV
+- **Almacenamiento en archivo CSV** (`data/productos.csv`)
+- **Parser CSV robusto** que maneja:
+  - Campos con comas internas (descripción larga)
+  - Comillas dobles (escaping correcto)
+  - Saltos de línea en descripciones
+- **Generación de IDs secuenciales** automática
+- **Soft delete** para mantener histórico sin pérdida de datos
+- **Transacciones atómicas** (lectura → modificación → escritura)
+- **Inyección de ruta CSV** para testing sin side effects
+
 ### Gestión de Metadatos Auth0
-- Actualización de `user_metadata` a través de Management API
-- Obtención de tokens de acceso automática con client credentials flow
-- **Cache de tokens** para optimización (5 minutos antes de expiración)
+- Actualización de `user_metadata` vía Management API
+- **Obtención automática de tokens** con client credentials flow (OAuth2)
+- **Cache inteligente de tokens** (renovación 5 minutos antes de expirar)
 - Manejo robusto de errores con mensajes descriptivos
+- Separación de credenciales: login (user) vs Management API (M2M)
 
 ### Auth0 Management API Integration
-- **Fetch API nativo** de Node.js (v18+)
-- Sin dependencias externas (axios removido)
-- Credenciales M2M (Machine to Machine) separadas
-- Control explícito de respuestas HTTP
-- Logging detallado para debugging
+- **Fetch API nativo** de Node.js v18+ (sin axios ni dependencias externas)
+- Credenciales M2M (Machine to Machine) separadas del flujo de login
+- Control explícito de respuestas HTTP con manejo de errores
+- Logging detallado con emojis para debugging (✅ éxito, ❌ error)
+- Reintentos automáticos en caso de token expirado
 
-### Validaciones Robustas
-- **Cliente**: JavaScript con validaciones en tiempo real
-- **Servidor**: Doble capa de validación
-  1. `sanitizeUserData()` - Limpieza de datos
-  2. `validateUserData()` - Validación de reglas de negocio
+### Validaciones Robustas (Defense in Depth)
+**Capa 1 - Cliente (JavaScript):**
+- Validaciones en tiempo real mientras el usuario escribe
+- Feedback visual inmediato (bordes rojos, mensajes)
+- Prevención de envío si hay errores
+
+**Capa 2 - Servidor (Node.js):**
+1. `sanitizeUserData()` / `sanitizeProductData()` - Limpieza de datos
+2. `validateUserData()` / `validateProductData()` - Validación de reglas
 - Prevención de inyección de datos maliciosos
-- Normalización de formatos (uppercase, trim)
+- Normalización de formatos (uppercase para documentos, trim)
+- Validación de tipos de datos (números, strings, rangos)
 
-### Manejo de Errores
-- Páginas de error personalizadas
-- Mensajes de error claros para el usuario
-- Logging completo en servidor con emojis para fácil identificación
-- Fallback graceful en caso de fallos de API
-- Captura de errores en múltiples niveles
+### Manejo de Errores y Logging
+- **Páginas de error personalizadas** (`error.ejs`)
+- **Mensajes de error claros** para el usuario final
+- **Logging completo en servidor** con:
+  - ✅ Operaciones exitosas (verde)
+  - ❌ Errores (rojo)
+  - ℹ️ Información (azul)
+- **Fallback graceful** en caso de fallos de API (muestra datos parciales)
+- **Captura de errores en múltiples niveles**:
+  - Try-catch en servicios
+  - Middleware de errores global
+  - Validación preventiva
 
 ### Seguridad
-- Tokens de acceso cacheados de forma segura
-- Credenciales en variables de entorno
-- Validación de autenticación en rutas protegidas
-- Sanitización de inputs del usuario
-- Separación de credenciales de login vs Management API
+- **Tokens de acceso cacheados** de forma segura en memoria
+- **Credenciales en variables de entorno** (.env no versionado)
+- **Validación de autenticación** en todas las rutas protegidas
+- **Sanitización de inputs** del usuario antes de procesamiento
+- **Separación de concerns**: credenciales de login ≠ Management API
+- **Soft delete** en lugar de eliminación física (auditoría)
+- **HTTPS recomendado** en producción (Auth0 requirement)
+
+### Testing y Calidad
+- **Vitest 4.0.9** como framework de pruebas
+- **14 tests unitarios** cubriendo todas las operaciones CRUD:
+  - 4 tests de CREATE (1 éxito + 3 errores de validación)
+  - 3 tests de READ (2 éxitos + 1 producto inexistente)
+  - 3 tests de UPDATE (1 éxito + 2 errores)
+  - 2 tests de DELETE (1 éxito + 1 error)
+  - 2 tests de VALIDATION (1 éxito + 1 múltiples errores)
+- **Archivo CSV temporal** para tests (sin afectar datos reales)
+- **Patrón AAA** (Arrange-Act-Assert) para claridad
+- **100% de tests pasando** (verificado en cada commit)
 
 ## 🔬 Documentación del Código
 
-Todo el código está completamente documentado en inglés siguiendo el estándar JSDoc:
+Todo el código está completamente documentado en inglés siguiendo el estándar **JSDoc**:
 
-- **Comentarios de clase**: Descripción del propósito de cada clase
-- **Comentarios de método**: Explicación detallada de cada función
+- **Comentarios de clase**: Descripción del propósito y responsabilidades
+- **Comentarios de método**: Explicación detallada de funcionalidad
 - **Parámetros**: Tipo, nombre y descripción de cada parámetro
 - **Retornos**: Tipo y descripción de valores de retorno
-- **Errores**: Documentación de excepciones que puede lanzar
+- **Errores**: Documentación de excepciones que puede lanzar (`@throws`)
 
-Ejemplo:
+### Ejemplos de Documentación
+
+#### Auth0 Service
 ```javascript
 /**
  * Updates user metadata in Auth0 user profile
@@ -236,52 +441,275 @@ Ejemplo:
  * @param {string} userId - Auth0 user ID (format: provider|id)
  * @param {Object} userMetadata - Object containing metadata fields
  * @returns {Promise<Object>} Updated user object from Auth0
- * @throws {Error} If update fails
+ * @throws {Error} If update fails or user not found
  */
 async updateUserMetadata(userId, userMetadata) {
   // Implementation...
 }
 ```
 
+#### Product Service
+```javascript
+/**
+ * Creates a new product with sequential ID
+ * Validates data and appends to CSV file
+ * 
+ * @param {Object} productData - Product data
+ * @param {string} productData.nombre - Product name (min 3 chars)
+ * @param {string} [productData.descripcion] - Product description (optional)
+ * @param {number} productData.precio - Product price (must be positive)
+ * @param {number} productData.cantidad - Product quantity (integer ≥ 0)
+ * @returns {Promise<Object>} Created product object with assigned ID
+ * @throws {Error} If validation fails or creation fails
+ */
+async createProduct(productData) {
+  // Implementation...
+}
+```
+
+Toda la documentación interna sigue este estándar para facilitar:
+- **Mantenimiento** del código a largo plazo
+- **Onboarding** de nuevos desarrolladores
+- **Generación automática** de docs con herramientas como JSDoc
+- **Autocompletado** en IDEs modernos (VSCode, WebStorm)
+
 ## 🎯 Estado del Proyecto
 
-- [x] Configurar el formulario de logueo de Auth0
+### Actividad 3 - Autenticación y Perfiles ✅
+- [x] Configurar Auth0 Universal Login
 - [x] Integración completa con Auth0 Management API
 - [x] Funcionalidad de actualización de datos de usuario
-- [x] Documentación completa del código (JSDoc)
-- [x] Validaciones cliente y servidor
+- [x] Validaciones cliente y servidor (Defense in Depth)
 - [x] Manejo robusto de errores
 - [x] Cache de tokens optimizado
-- [x] Navegación dinámica
-- [x] Diseño responsive
-- [ ] Diagrama de flujo de la aplicación
-- [ ] Tests unitarios
-- [ ] Tests de integración
+- [x] Navegación dinámica según estado de autenticación
+- [x] Diseño responsive y accesible
+- [x] Documentación completa del código (JSDoc)
+
+### Actividad 4 - CRUD de Productos ✅
+- [x] Sistema CRUD completo (Create, Read, Update, Delete)
+- [x] Almacenamiento persistente en CSV
+- [x] DataTables con paginación, búsqueda y ordenamiento
+- [x] Localización completa en español
+- [x] Modales Bootstrap para formularios
+- [x] Toasts de notificación
+- [x] Soft delete para auditoría
+- [x] Validaciones duales (cliente + servidor)
+- [x] API REST con JSON
+- [x] Manejo de errores detallado
+- [x] **Pruebas unitarias con Vitest (14 tests, 100% pasando)**
+- [x] Archivo CSV temporal para tests (sin side effects)
+- [x] Documentación de testing (`tests/README.md`)
+
+### Pendientes / Mejoras Futuras 📋
+- [ ] Cobertura de código con `@vitest/coverage-v8`
+- [ ] Tests de integración (end-to-end con Playwright)
+- [ ] Migración de CSV a base de datos (PostgreSQL/MongoDB)
+- [ ] Paginación del lado servidor (actualmente cliente)
+- [ ] Upload de imágenes para productos
+- [ ] Exportación de productos a Excel/PDF
+- [ ] Filtros avanzados por precio y categoría
+- [ ] Historial de cambios (audit log)
+- [ ] API pública con autenticación JWT
+- [ ] Internacionalización (i18n) multiidioma
 
 ## 🚀 Tecnologías Utilizadas
 
 ### Backend
-- **Node.js** (v18+) - Runtime de JavaScript
-- **Express** (v5.1.0) - Framework web
-- **express-openid-connect** (v2.19.2) - Middleware de Auth0
-- **EJS** (v3.1.10) - Motor de plantillas
+- **Node.js** (v18+) - Runtime de JavaScript con soporte nativo de Fetch API
+- **Express** (v5.1.0) - Framework web minimalista y flexible
+- **express-openid-connect** (v2.19.2) - Middleware de Auth0 para autenticación
+- **EJS** (v3.1.10) - Motor de plantillas server-side
 - **dotenv** (v17.2.3) - Gestión de variables de entorno
+- **ES Modules** - import/export moderno (no CommonJS)
 
 ### Frontend
-- **CSS3** - Estilos modernos con variables CSS
-- **JavaScript ES6+** - Validaciones del cliente
-- **Google Fonts** (Inter) - Tipografía
+- **CSS3** - Estilos modernos con:
+  - Variables CSS (`:root`)
+  - Flexbox y Grid Layout
+  - Animaciones y transiciones suaves
+  - Media queries para responsive
+- **JavaScript ES6+** - Código moderno con:
+  - Fetch API para peticiones asíncronas
+  - Async/await
+  - Arrow functions
+  - Destructuring
+  - Template literals
+- **Bootstrap 5** - Framework CSS para modales y componentes
+- **DataTables 1.13.7** - Tablas interactivas con paginación y búsqueda
+- **SweetAlert2** - Alertas y confirmaciones elegantes
+- **Google Fonts** (Inter) - Tipografía moderna y legible
 
-### APIs y Servicios
-- **Auth0 Authentication API** - Login/Logout
-- **Auth0 Management API** - Gestión de usuarios
-- **Fetch API** - Peticiones HTTP nativas
+### APIs y Servicios Externos
+- **Auth0 Authentication API** - Login/Logout con OAuth2/OIDC
+- **Auth0 Management API** - Gestión de usuarios y metadatos
+- **Fetch API** - Peticiones HTTP nativas (sin axios ni librerías)
 
-## 📞 Soporte
+### Testing
+- **Vitest** (v4.0.9) - Framework de testing ultrarrápido
+  - Compatible con sintaxis de Jest
+  - Soporte nativo para ES Modules
+  - Hot Module Replacement (HMR)
+  - Interfaz UI opcional (`@vitest/ui`)
+- **Node.js Test Runner** - APIs nativas de Node.js (fs/promises, os)
 
-Si encuentras algún problema o tienes preguntas sobre la implementación, debes obtener:
+### Almacenamiento
+- **CSV** - Archivos de texto plano separados por comas
+  - Portable y fácil de inspeccionar
+  - No requiere base de datos
+  - Perfecto para prototipos y aprendizaje
 
-1. Las 7 esferas del dragón.
-2. Un pelo de la barba de Severus Snape.
-3. El One Piece.
-4. Un 5 en una materia con Delio.
+### DevOps y Tooling
+- **Git** - Control de versiones
+- **npm** - Gestor de paquetes
+- **Node --watch** - Auto-reload en desarrollo (flag nativo)
+- **JSDoc** - Documentación inline con tipado
+
+## 🧪 Pruebas Unitarias
+
+### Framework y Configuración
+Utilizamos **Vitest 4.0.9** por sus ventajas:
+- ⚡ **Velocidad**: 10x más rápido que Jest
+- � **ES Modules nativos**: Sin configuración adicional
+- 🔥 **HMR**: Re-ejecuta solo tests afectados por cambios
+- ✅ **API compatible con Jest**: Fácil migración y curva de aprendizaje baja
+
+### Estructura de Tests
+```
+tests/
+├── productService.test.js    # 14 tests unitarios del servicio CRUD
+└── README.md                 # Documentación detallada de testing
+```
+
+### Cobertura de Tests (14 tests, 100% pasando)
+
+#### CREATE - `createProduct()` (4 tests)
+- ✅ **Éxito**: Crear producto con datos válidos
+- ❌ **Error**: Nombre inválido (< 3 caracteres)
+- ❌ **Error**: Precio inválido (≤ 0)
+- ❌ **Error**: Cantidad inválida (negativa)
+
+#### READ - `getProductById()` y `getActiveProducts()` (3 tests)
+- ✅ **Éxito**: Obtener producto existente por ID
+- ❌ **Error**: Producto inexistente (retorna null)
+- ✅ **Éxito**: Filtrar solo productos activos
+
+#### UPDATE - `updateProduct()` (3 tests)
+- ✅ **Éxito**: Actualizar producto existente
+- ❌ **Error**: Intentar actualizar producto inexistente
+- ❌ **Error**: Actualizar con datos inválidos
+
+#### DELETE - `deleteProduct()` (2 tests)
+- ✅ **Éxito**: Soft delete (marca activo=false)
+- ❌ **Error**: Intentar eliminar producto inexistente
+
+#### VALIDATION - `validateProductData()` (2 tests)
+- ✅ **Éxito**: Validar datos correctos
+- ❌ **Error**: Detectar múltiples errores simultáneamente
+
+### Estrategia de Testing
+**Archivo CSV temporal por test suite:**
+- Cada test utiliza un archivo temporal en `os.tmpdir()`
+- Inyección de ruta con `setCSVPath()` (agregado al servicio)
+- No hay side effects ni corrupción de datos reales
+- Limpieza automática después de cada test
+
+**Patrón AAA (Arrange-Act-Assert):**
+```javascript
+it('✅ Caso exitoso: Debe crear un producto válido', async () => {
+  // Arrange - Preparar datos de entrada
+  const newProduct = {
+    nombre: 'Nuevo Producto',
+    descripcion: 'Descripción del nuevo producto',
+    precio: 5000,
+    cantidad: 50
+  };
+
+  // Act - Ejecutar la operación
+  const result = await productService.createProduct(newProduct);
+
+  // Assert - Verificar resultados
+  expect(result).toBeDefined();
+  expect(result.id).toBe(4); // ID secuencial
+  expect(result.nombre).toBe('Nuevo Producto');
+  expect(result.activo).toBe(true);
+});
+```
+
+### Comandos de Testing
+```bash
+# Ejecutar una vez (CI mode)
+npm run test:run
+
+# Modo watch (desarrollo, re-ejecuta al detectar cambios)
+npm test
+
+# Con interfaz visual (opcional)
+npm run test:ui
+
+# Con reporte de cobertura
+npm run test:coverage  # Requiere @vitest/coverage-v8
+```
+
+### Resultado de Ejecución
+```
+✓ tests/productService.test.js (14 tests) 13ms
+  ✓ ProductService - CRUD Operations (14)
+    ✓ CREATE - createProduct() (4)
+    ✓ READ - getProductById() (2)
+    ✓ READ - getActiveProducts() (1)
+    ✓ UPDATE - updateProduct() (3)
+    ✓ DELETE - deleteProduct() [Soft Delete] (2)
+    ✓ VALIDATION - validateProductData() (2)
+
+Test Files  1 passed (1)
+     Tests  14 passed (14)
+  Duration  102ms
+```
+
+### Beneficios de las Pruebas
+- ✅ **Confianza en refactorización**: Cambios sin miedo a romper funcionalidad
+- ✅ **Documentación viva**: Los tests describen el comportamiento esperado
+- ✅ **Detección temprana de bugs**: Errores encontrados antes de producción
+- ✅ **Integración continua**: Ready para CI/CD pipelines (GitHub Actions, Jenkins)
+
+Ver documentación completa en [`tests/README.md`](./tests/README.md)
+
+## 📞 Soporte y Contacto
+
+Si encuentras algún problema o tienes preguntas sobre la implementación:
+
+1. **Revisa la documentación**:
+   - Este README principal
+   - `tests/README.md` para testing
+   - Comentarios JSDoc en el código fuente
+
+2. **Verifica la configuración**:
+   - Variables de entorno en `.env`
+   - Permisos de Auth0 Management API
+   - Versión de Node.js (debe ser v18+)
+
+3. **Debugging**:
+   - Revisa los logs del servidor (emojis ✅/❌ para facilitar identificación)
+   - Verifica la consola del navegador (F12)
+   - Ejecuta tests unitarios para verificar integridad del servicio
+
+4. **Problemas comunes**:
+   - **"Client is not authorized"**: Faltan permisos en Auth0 Management API
+   - **"Product not found"**: ID incorrecto o producto eliminado (soft delete)
+   - **Tests fallan**: Verifica que `data/productos.csv` exista y tenga permisos de escritura
+
+---
+
+## 👨‍💻 Autor
+
+**Alejandro González**  
+Taller de Aplicaciones y Servicios Web - ITM 2025-II
+
+## 📄 Licencia
+
+ISC License - Proyecto educativo para el Instituto Tecnológico Metropolitano (ITM)
+
+---
+
+**Nota**: Este proyecto es parte de las actividades académicas del curso de Aplicaciones y Servicios Web. Combina las Actividades 3 (Auth0 + Perfiles) y 4 (CRUD + Testing) en una aplicación full-stack completa.
