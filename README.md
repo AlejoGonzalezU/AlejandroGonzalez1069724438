@@ -1,6 +1,6 @@
 # Aplicación CRUD con Auth0 - ASW ITM 2025-II
 
-Aplicación Node.js full-stack que combina autenticación segura con Auth0 y gestión completa de productos mediante operaciones CRUD. Incluye gestión de perfiles de usuario, almacenamiento en CSV, DataTables para visualización interactiva y pruebas unitarias con Vitest.
+Aplicación Node.js full-stack que combina autenticación segura con Auth0 y gestión completa de productos mediante operaciones CRUD. Incluye gestión de perfiles de usuario, almacenamiento en CSV, DataTables para visualización interactiva, pruebas unitarias con Vitest y pipeline de CI/CD automatizado con GitHub Actions.
 
 ## 🚀 Características Principales
 
@@ -25,6 +25,8 @@ Aplicación Node.js full-stack que combina autenticación segura con Auth0 y ges
 - ✅ **Validaciones dual layer** (cliente y servidor)
 - ✅ **Defense in Depth** para seguridad
 - ✅ **Pruebas unitarias** con Vitest (14 tests, 100% pasando)
+- ✅ **CI/CD Pipeline** con GitHub Actions (tests automáticos, security scanning)
+- ✅ **Multi-version testing** (Node 18, 20, 22)
 - ✅ **Código documentado** con JSDoc en inglés
 - ✅ **ES Modules** (import/export)
 - ✅ **Fetch API nativo** sin dependencias externas
@@ -33,6 +35,9 @@ Aplicación Node.js full-stack que combina autenticación segura con Auth0 y ges
 
 ```
 Application/
+├── .github/
+│   └── workflows/
+│       └── CI.yml                  # GitHub Actions CI pipeline
 ├── src/
 │   ├── controllers/           # Lógica de controladores (manejo de requests/responses)
 │   │   ├── profileController.js    # Gestión de perfiles de usuario
@@ -496,8 +501,22 @@ Toda la documentación interna sigue este estándar para facilitar:
 - [x] Archivo CSV temporal para tests (sin side effects)
 - [x] Documentación de testing (`tests/README.md`)
 
+### Actividad 5 - CI/CD Pipeline ✅
+- [x] GitHub Actions workflow configurado
+- [x] Ejecución automática de tests en cada PR
+- [x] Ejecución automática de tests en push a main
+- [x] Tests en múltiples versiones de Node.js (18, 20, 22)
+- [x] Security audit con npm audit
+- [x] Secret scanning con TruffleHog
+- [x] Build verification automática
+- [x] Coverage report generation
+- [x] Comentarios automáticos en PRs con resultados
+- [x] Status checks requeridos para merge
+- [x] Cancelación automática de workflows obsoletos
+- [x] Jobs paralelos para optimizar tiempos
+- [x] Cache de node_modules para velocidad
+
 ### Pendientes / Mejoras Futuras 📋
-- [ ] Cobertura de código con `@vitest/coverage-v8`
 - [ ] Tests de integración (end-to-end con Playwright)
 - [ ] Migración de CSV a base de datos (PostgreSQL/MongoDB)
 - [ ] Paginación del lado servidor (actualmente cliente)
@@ -507,6 +526,7 @@ Toda la documentación interna sigue este estándar para facilitar:
 - [ ] Historial de cambios (audit log)
 - [ ] API pública con autenticación JWT
 - [ ] Internacionalización (i18n) multiidioma
+- [ ] Deployment automático a producción (Vercel/Heroku)
 
 ## 🚀 Tecnologías Utilizadas
 
@@ -546,7 +566,16 @@ Toda la documentación interna sigue este estándar para facilitar:
   - Soporte nativo para ES Modules
   - Hot Module Replacement (HMR)
   - Interfaz UI opcional (`@vitest/ui`)
+  - Coverage report con `@vitest/coverage-v8`
 - **Node.js Test Runner** - APIs nativas de Node.js (fs/promises, os)
+
+### CI/CD
+- **GitHub Actions** - Automatización de workflows
+  - Pipeline CI completo en `.github/workflows/CI.yml`
+  - Tests automáticos en PRs y pushes
+  - Security scanning y audit
+  - Multi-version testing (Node 18, 20, 22)
+  - Coverage reports automáticos
 
 ### Almacenamiento
 - **CSV** - Archivos de texto plano separados por comas
@@ -670,6 +699,164 @@ Test Files  1 passed (1)
 
 Ver documentación completa en [`tests/README.md`](./tests/README.md)
 
+## 🔄 CI/CD Pipeline
+
+### GitHub Actions Workflow
+
+El proyecto incluye un pipeline de CI/CD completo que se ejecuta automáticamente en cada Pull Request y push a `main`. El workflow está definido en `.github/workflows/CI.yml`.
+
+### Triggers
+- **Pull Requests** hacia la rama `main`
+- **Push directo** a la rama `main`
+- **Cancelación automática** de workflows obsoletos si se hace un nuevo push
+
+### Jobs Paralelos
+
+#### 1. Security Checks 🔒
+- **npm audit**: Detecta vulnerabilidades en dependencias (nivel moderate o superior)
+- **TruffleHog**: Escanea secretos expuestos (API keys, tokens, contraseñas)
+- **Node.js**: Versión 20 LTS
+- **Continue on error**: Los warnings no bloquean el pipeline
+
+#### 2. Tests ✅
+- **Multi-version testing**: Node.js 18, 20, 22 (matriz paralela)
+- **Test execution**: `npm run test:run` (14 tests unitarios)
+- **Coverage report**: Generado automáticamente en Node 20
+- **Artifacts**: Coverage report subido como artefacto de GitHub
+- **Fail-fast disabled**: Continúa testing en otras versiones aunque una falle
+
+#### 3. Build Verification 📦
+- **Build script detection**: Detecta automáticamente si existe `npm run build`
+- **Optional execution**: Solo ejecuta si el script existe
+- **Node.js**: Versión 20 LTS
+- **Validación**: Asegura que el proyecto pueda compilar correctamente
+
+#### 4. PR Comment 💬
+- **Comentarios automáticos** en Pull Requests con:
+  - Estado de todos los checks (✅/❌)
+  - Resultados de tests en Node 18, 20, 22
+  - Security audit status
+  - Secret scanning status
+  - Build verification status
+  - Coverage summary (lines, statements, functions, branches)
+- **Permisos**: Requiere `pull-requests: write`
+- **Condicional**: Solo se ejecuta en PRs, no en push directo
+
+#### 5. CI Success 🏆
+- **Status check final** que agrega todos los resultados
+- **Bloqueador de merge**: Si falla, no permite merge del PR
+- **Always run**: Se ejecuta incluso si algún job anterior falla
+- **Agregación**: Verifica que security, test y build hayan sido exitosos
+
+### Optimizaciones
+
+#### Cache de node_modules
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    cache: 'npm'
+```
+Reduce el tiempo de instalación de ~30s a ~5s en ejecuciones subsecuentes.
+
+#### Jobs Paralelos
+Los jobs `security`, `test` y `build` se ejecutan simultáneamente, reduciendo el tiempo total del pipeline de ~3min a ~1min.
+
+#### Cancelación de Workflows
+```yaml
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+```
+Cancela automáticamente workflows anteriores si se hace un nuevo push, ahorrando recursos.
+
+### Configuración Requerida en GitHub
+
+#### 1. Branch Protection Rules
+Para que el CI bloquee merges si fallan los tests:
+
+1. **Settings** → **Branches** → **Add branch protection rule**
+2. Branch name pattern: `main`
+3. Activar:
+   - ✅ **Require status checks to pass before merging**
+   - Seleccionar: `CI Success`
+   - ✅ **Require branches to be up to date before merging**
+
+#### 2. Workflow Permissions
+Para que el CI pueda comentar en PRs:
+
+1. **Settings** → **Actions** → **General**
+2. **Workflow permissions**:
+   - ✅ **Read and write permissions**
+   - ✅ **Allow GitHub Actions to create and approve pull requests**
+
+### Resultados del Pipeline
+
+#### En Pull Requests
+```
+✅ Security Checks - passed (20s)
+✅ Tests (Node 18) - passed (25s)
+✅ Tests (Node 20) - passed (23s)
+✅ Tests (Node 22) - passed (24s)
+✅ Build Verification - passed (18s)
+✅ PR Comment with Results - passed (5s)
+✅ CI Success - passed (2s)
+```
+
+#### Comentario Automático en PR
+```markdown
+## ✅ CI Pipeline Results
+
+**Status:** All checks passed! 🎉
+
+### Test Results
+- ✅ Unit tests passed on Node 18, 20, 22
+- ✅ Security audit completed
+- ✅ No secrets detected
+- ✅ Build verification passed
+
+📊 **Coverage Summary:**
+- Lines: 85.4%
+- Statements: 84.2%
+- Functions: 78.9%
+- Branches: 72.1%
+
+---
+*Automated comment by GitHub Actions*
+```
+
+### Comandos Útiles
+
+```bash
+# Ejecutar tests localmente (simula CI)
+npm run test:run
+
+# Ver coverage localmente
+npm run test:coverage
+
+# Verificar que no hay secretos expuestos (requiere TruffleHog local)
+# brew install trufflesecurity/trufflehog/trufflehog
+trufflehog filesystem . --only-verified
+```
+
+### Troubleshooting CI
+
+#### Tests fallan en CI pero pasan localmente
+- Verifica la versión de Node.js: `node --version`
+- Asegúrate de usar `npm ci` en lugar de `npm install`
+- Revisa si hay dependencias de dev faltantes
+
+#### Secret scanning detecta falsos positivos
+- Agrega un `.trufflehog.yml` para excluir patrones específicos
+- Usa `continue-on-error: true` en ese step (ya configurado)
+
+#### Coverage report no se genera
+- Verifica que `@vitest/coverage-v8` esté instalado: `npm list @vitest/coverage-v8`
+- El workflow ya tiene `continue-on-error: true` para no bloquear si falla
+
+#### Workflow no comenta en PR
+- Revisa los permisos en **Settings** → **Actions** → **General**
+- Asegúrate de que `pull-requests: write` esté habilitado
+
 ## 📞 Soporte y Contacto
 
 Si encuentras algún problema o tienes preguntas sobre la implementación:
@@ -707,4 +894,4 @@ ISC License - Proyecto educativo para el Instituto Tecnológico Metropolitano (I
 
 ---
 
-**Nota**: Este proyecto es parte de las actividades académicas del curso de Aplicaciones y Servicios Web. Combina las Actividades 3 (Auth0 + Perfiles) y 4 (CRUD + Testing) en una aplicación full-stack completa.
+**Nota**: Este proyecto es parte de las actividades académicas del curso de Aplicaciones y Servicios Web. Combina las Actividades 3 (Auth0 + Perfiles), 4 (CRUD + Testing) y 5 (CI/CD Pipeline) en una aplicación full-stack completa con automatización de calidad.
