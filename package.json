@@ -30,6 +30,7 @@
     "express-openid-connect": "^2.19.2"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.14",
     "@vitest/ui": "^4.0.9",
     "vitest": "^4.0.9"
   }
