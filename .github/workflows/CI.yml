@@ -14,63 +14,63 @@ jobs:
   security:
     name: Security Checks
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-      
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run npm audit
         run: npm audit --audit-level=moderate
         continue-on-error: true
-      
+
       - name: Scan for secrets
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
+          base: ${{ github.event.before || github.event.repository.default_branch }}
+          head: ${{ github.sha }}
 
   test:
     name: Tests (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [18, 20, 22]
       fail-fast: false
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run unit tests
         run: npm run test:run
-      
+
       - name: Generate coverage report
         if: matrix.node-version == 20
         run: npm run test:coverage || echo "No coverage script found"
         continue-on-error: true
-      
+
       - name: Upload coverage to GitHub
         if: matrix.node-version == 20
         uses: actions/upload-artifact@v4
@@ -82,20 +82,20 @@ jobs:
   build:
     name: Build Verification
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-      
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Verify build
         run: |
           if grep -q '"build"' package.json; then
@@ -112,7 +112,7 @@ jobs:
     if: github.event_name == 'pull_request'
     permissions:
       pull-requests: write
-    
+
     steps:
       - name: Download coverage artifact
         uses: actions/download-artifact@v4
@@ -120,47 +120,47 @@ jobs:
           name: coverage-report
           path: coverage/
         continue-on-error: true
-      
+
       - name: Comment PR
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
             let coverageText = 'Coverage report not available';
-            
+
             try {
               const coverageSummary = fs.readFileSync('coverage/coverage-summary.json', 'utf8');
               const summary = JSON.parse(coverageSummary);
               const total = summary.total;
-              
-              coverageText = \`
+
+              coverageText = `
               📊 **Coverage Summary:**
-              - Lines: \${total.lines.pct}%
-              - Statements: \${total.statements.pct}%
-              - Functions: \${total.functions.pct}%
-              - Branches: \${total.branches.pct}%
-              \`;
+              - Lines: ${total.lines.pct}%
+              - Statements: ${total.statements.pct}%
+              - Functions: ${total.functions.pct}%
+              - Branches: ${total.branches.pct}%
+              `;
             } catch (e) {
               console.log('Coverage summary not found, using default message');
             }
-            
-            const comment = \`
+
+            const comment = `
             ## ✅ CI Pipeline Results
-            
+
             **Status:** All checks passed! 🎉
-            
+
             ### Test Results
             - ✅ Unit tests passed on Node 18, 20, 22
             - ✅ Security audit completed
             - ✅ No secrets detected
             - ✅ Build verification passed
-            
-            \${coverageText}
-            
+
+            ${coverageText}
+
             ---
             *Automated comment by GitHub Actions*
-            \`;
-            
+            `;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -173,7 +173,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [security, test, build]
     if: always()
-    
+
     steps:
       - name: Check all jobs status
         run: |
