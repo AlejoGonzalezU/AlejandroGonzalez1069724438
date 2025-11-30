@@ -132,19 +132,19 @@ jobs:
               const coverageSummary = fs.readFileSync('coverage/coverage-summary.json', 'utf8');
               const summary = JSON.parse(coverageSummary);
               const total = summary.total;
-              
-              coverageText = \`
+
+              coverageText = `
               📊 **Coverage Summary:**
-              - Lines: \${total.lines.pct}%
-              - Statements: \${total.statements.pct}%
-              - Functions: \${total.functions.pct}%
-              - Branches: \${total.branches.pct}%
-              \`;
+              - Lines: ${total.lines.pct}%
+              - Statements: ${total.statements.pct}%
+              - Functions: ${total.functions.pct}%
+              - Branches: ${total.branches.pct}%
+              `;
             } catch (e) {
               console.log('Coverage summary not found, using default message');
             }
 
-            const comment = \`
+            const comment = `
             ## ✅ CI Pipeline Results
 
             **Status:** All checks passed! 🎉
@@ -155,11 +155,11 @@ jobs:
             - ✅ No secrets detected
             - ✅ Build verification passed
 
-            \${coverageText}
+            ${coverageText}
 
             ---
             *Automated comment by GitHub Actions*
-            \`;
+            `;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
